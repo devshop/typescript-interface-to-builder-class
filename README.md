@@ -1,8 +1,8 @@
 # typescript-interface-to-builder-class README
 
-This is the README for your extension "typescript-interface-to-builder-class". After writing up a brief description, we recommend including the following sections.
-
 ## Features
+
+A Visual Studio Code extension that generates a builder class from a TypeScript interface.
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
