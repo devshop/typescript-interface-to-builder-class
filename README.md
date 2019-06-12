@@ -1,2 +1,2 @@
-# typescript-interface-to-builder-class
-Creates a builder class from a TypeScript Interface
+# TypeScript Interface to Builder Class
+A VSCode extension that generates a builder class from a TypeScript interface.
