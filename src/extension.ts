@@ -90,45 +90,43 @@ export function activate(context: vscode.ExtensionContext) {
 				const propertyLocalAssignment = `${p}: this.${p}`;
 				propertyLocalAssignments.push(propertyLocalAssignment);
 
-				const propertyExternalAssignment = `public with${uppercaseFirstLetter(p)}(value: ${type}) {\n    this.${p} = value\n    return this\n  }`;
+				const propertyExternalAssignment = `public with${uppercaseFirstLetter(p)}(value: ${type}) {\r\n    this.${p} = value\r\n    return this\r\n  }`;
 				propertyExternalAssignments.push(propertyExternalAssignment);
 			});
 
 			// TODO: Make the indenting prettier.
 			const classString = `export class ${className}Builder {
-  ${propertyDefinitions.join('\n  ')}
+  ${propertyDefinitions.join('\r\n  ')}
 
   public build(): ${interfaceName} {
     return {
-      ${propertyLocalAssignments.join(',\n      ')}
+      ${propertyLocalAssignments.join(',\r\n      ')}
     }
   }
 
-  ${propertyExternalAssignments.join('\n\n  ')}
-}`;
+  ${propertyExternalAssignments.join('\r\n\r\n  ')}
+}\r\n`;
 
-			const filePath = editor.document.uri.toString();
-			const fileName = filePath.match(/[a-z.-]+(?=\.ts)/);
-			const folderPath = filePath.substring(0, filePath.lastIndexOf('/'));
+			const filePath = editor.document.uri.fsPath;
+			const fileName = filePath.match(/[a-z.-]+(?=\.ts)/)![0];
+			let folderPath = filePath.substring(0, filePath.lastIndexOf('/'));
 
-			console.log(filePath);
-			console.log(fileName);
-			console.log(folderPath);
-
-			// console.log(editor.document.uri.toString().split(":")[1]);
-			console.log(editor.document.uri.fsPath);
+			if (!folderPath) {
+				folderPath = filePath.substring(0, filePath.lastIndexOf('\\'));
+			}
 
 			// Write the file to the current editor directory.
-			fs.writeFile(path.join(folderPath, `${fileName}.ts`),
+			fs.writeFile(path.join(folderPath, `${fileName}.builder.ts`),
 			classString, 
 			err => {
 				if (err) {
 					console.log(err);
 					vscode.window.showErrorMessage("File save failed");
+					return;
 				}
 			});
 
-			vscode.window.showInformationMessage('Generated buidler class from interface.');
+			vscode.window.showInformationMessage(`Builder class saved to: ${path.join(folderPath, `${fileName}.builder.ts`)}`);
 		};
 
 		start();		
