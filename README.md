@@ -14,7 +14,7 @@ The generated file will be saved next to your interface file with `.builder.ts` 
 
 If you're not already using builders, you should start. They are a great way to easily generate data for your unit tests.
 
-If you are using this extension and find any issues or wish to add improvments, feel free to contribute.
+If you are using this extension and find any issues or wish to add improvments, feel free to [contribute](https://github.com/devshop/typescript-interface-to-builder-class).
 
 ## Example
 
@@ -69,11 +69,3 @@ To use the extension:
 
 - Any required imports will have to be added manually after the builder is generated.
 - If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the inital value will be `undefined` which will not compile unless the property is optional. These values will need to entered manually.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 0.1.0
-
-Beta release.

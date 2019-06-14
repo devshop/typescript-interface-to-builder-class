@@ -6,4 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.1.0] - 2019-06-14
+
 - Initial release
+
+## [0.1.1] - 2019-06-14
+
+### Changed
+- Fixed broken image links in extensions view
+
+## [0.1.2] - 2019-06-14
+
+### Changed
+- Fixed issues when using camelCase file naming

@@ -155,14 +155,20 @@ export function activate(context: vscode.ExtensionContext) {
 
       const saveBuilderFile = (editor: vscode.TextEditor, text: string) => {
         const filePath = editor!.document.uri.fsPath
-        const fileName = filePath.match(/[a-z.-]+(?=\.ts)/)![0]
+        const fileName = filePath.match(/[^\\/]+(?=\.ts)/)![0]
+        // Try to match the file naming convention.
+        const numOfDots = fileName.split('.').length
+        let builder = 'Builder'
+        if (numOfDots > 1) {
+          builder = '.builder'
+        }
         let folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
         if (!folderPath) {
           folderPath = filePath.substring(0, filePath.lastIndexOf('\\'))
         }
         // Writes the file to the current editor directory
         fs.writeFile(
-          path.join(folderPath, `${fileName}.builder.ts`),
+          path.join(folderPath, `${fileName}${builder}.ts`),
           text,
           err => {
             if (err) {
@@ -174,7 +180,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(
           `Builder class saved to: ${path.join(
             folderPath,
-            `${fileName}.builder.ts`
+            `${fileName}${builder}.ts`
           )}`
         )
       }
