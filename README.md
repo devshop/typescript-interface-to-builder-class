@@ -4,11 +4,11 @@ TypeScript Interface to Builder Class is a vscode extension that will save you t
 
 ## Features
 
-Stop wasting time manually writing out builder classes. Define an interface and use this extention to make your builder for you.
+Stop wasting time manually writing out builder classes. Define an interface and use this extention to generate your builder.
 
-\!\[Example\]\(images/example.png\)
+![Example](images/example.gif)
 
-The generated file will be saved next to your interface file with `.buidler.ts` appended to the end of the original filename.
+The generated file will be saved next to your interface file with `.builder.ts` appended to the end of the original filename.
 
 If you're not already using builders, you should start. They are a great way to easily generate data for your unit tests.
 
@@ -18,7 +18,7 @@ If you are using this extension and find any issues or wish to add improvments, 
 
 Here is an example of using the generated builder to create a user for a test scenario.
 
-Start with an interface file that you have written:
+Start with an interface file that you have written.
 
 **user.interface.ts**
 ```
@@ -64,7 +64,7 @@ To use the extension:
 ## Known Issues
 
 * Any required imports will have to be added manually after the builder is generated.
-* If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the inital value will be `undefined` which will not compile unless the property is optional. These values will need to 
+* If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the inital value will be `undefined` which will not compile unless the property is optional. These values will need to entered manually.
 
 ## Release Notes
 
