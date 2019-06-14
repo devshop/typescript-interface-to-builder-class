@@ -3,10 +3,19 @@ import * as path from 'path'
 // tslint:disable-next-line: no-implicit-dependencies
 import * as vscode from 'vscode'
 
+interface IPropertyOutput {
+  definitions: string[]
+  externalSetters: string[]
+  localSetters: string[]
+}
+
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     'extension.interfaceToBuilder',
     () => {
+      const b = '\r\n' // line break
+      const t = '\t' // tab
+
       const uppercaseFirstLetter = (s: string) =>
         s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -51,7 +60,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const getInterfaceName = (text: string) => {
-        // Search for the first word after "export interface" to find the name of the interface.
+        // Search for the first word after "export interface"
+        // to find the name of the interface.
         const interfaceNames = text.match(/(?<=\bexport interface\s)(\w+)/)
         if (!interfaceNames) {
           vscode.window.showErrorMessage('Could not find the interface name.')
@@ -61,15 +71,18 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const getClassName = (text: string) => {
-        // Check if the interface name has an "I" at the start. If it does, remove the the "I".
+        // Check if the interface name has an "I" at the start
+        // If it does, remove the the "I"
         if (/\b[I]/.test(text)) {
           return text.substring(1)
         }
         return text
       }
 
+      // TODO: Add support for optional types
       const getInterfaceProperties = (text: string) => {
-        // Find all the properties defined in the interface by looking for words before a colon(:)
+        // Find all the properties defined in the interface
+        // by looking for words before a colon(:)
         const properties = text.match(/(\w*[^\s])(?=:)/gm)
         if (!properties) {
           vscode.window.showErrorMessage(
@@ -80,28 +93,73 @@ export function activate(context: vscode.ExtensionContext) {
         return properties
       }
 
-      const getInterfacePropertyTypes = (text: string) => {
-        // Find all the property types defined in the interface by looking for words after a colon(:)
-        const types = text.match(/(?<=:\s)(.*)/g)
-        if (!types) {
+      const getInterfaceDatatypes = (text: string) => {
+        // Find all the property types defined in the interface
+        // by looking for words after a colon(:)
+        const datatypes = text.match(/(?<=:\s)(.*)/g)
+        if (!datatypes) {
           vscode.window.showErrorMessage(
-            'Could not find any property types defined in the interface.'
+            'Could not find any datatypes defined in the interface.'
           )
           return null
         }
-        return types
+        return datatypes
+      }
+
+      const generatePropertyOutput = (
+        properties: string[],
+        datatypes: string[]
+      ): IPropertyOutput => {
+        const output: IPropertyOutput = {
+          definitions: [],
+          externalSetters: [],
+          localSetters: []
+        }
+        properties.forEach((p, i) => {
+          const datatype = datatypes[i]
+          const value = getInitalPropertyValue(datatype)
+          const className = uppercaseFirstLetter(p)
+          output.definitions.push(`private ${p}: ${datatype} = ${value}`)
+          output.localSetters.push(`${p}: this.${p}`)
+          let propertyExternalSetter = ''
+          propertyExternalSetter += `public with${className}(value: ${datatype}) {${b}`
+          propertyExternalSetter += `${t}${t}this.${p} = value${b}`
+          propertyExternalSetter += `${t}${t}return this${b}`
+          propertyExternalSetter += `${t}}`
+          output.externalSetters.push(propertyExternalSetter)
+        })
+        return output
+      }
+
+      const generateClass = (
+        interfaceName: string,
+        output: IPropertyOutput
+      ): string => {
+        const className = getClassName(interfaceName)
+        const definitions = output.definitions.join(`${b}${t}`)
+        const localSetters = output.localSetters.join(`,${b}${t}${t}${t}`)
+        const externalSetters = output.externalSetters.join(`${b}${b}${t}`)
+        let classString = ''
+        classString += `export class ${className}Builder {${b}`
+        classString += `${t}${definitions}${b}${b}`
+        classString += `${t}public build(): ${interfaceName} {${b}`
+        classString += `${t}${t}return {${b}`
+        classString += `${t}${t}${t}${localSetters}${b}`
+        classString += `${t}${t}}${b}`
+        classString += `${t}}${b}${b}`
+        classString += `${t}${externalSetters}${b}`
+        classString += `}${b}`
+        return classString
       }
 
       const saveBuilderFile = (editor: vscode.TextEditor, text: string) => {
         const filePath = editor!.document.uri.fsPath
         const fileName = filePath.match(/[a-z.-]+(?=\.ts)/)![0]
         let folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
-
         if (!folderPath) {
           folderPath = filePath.substring(0, filePath.lastIndexOf('\\'))
         }
-
-        // Write the file to the current editor directory.
+        // Writes the file to the current editor directory
         fs.writeFile(
           path.join(folderPath, `${fileName}.builder.ts`),
           text,
@@ -112,7 +170,6 @@ export function activate(context: vscode.ExtensionContext) {
             }
           }
         )
-
         vscode.window.showInformationMessage(
           `Builder class saved to: ${path.join(
             folderPath,
@@ -121,83 +178,60 @@ export function activate(context: vscode.ExtensionContext) {
         )
       }
 
-      const getInitalPropertyValue = (type: string) => {
-        switch (type) {
-          case 'string[]':
-            return `[undefined]`
+      // TODO: Add support for optional types
+      const getInitalPropertyValue = (datatype: string) => {
+        switch (datatype) {
+          case 'string':
+            return undefined
           case 'number':
             return 1
+          case 'boolean':
+            return false
+          case 'string[]':
+            return `[undefined]`
+          case 'number[]':
+            return `[1]`
+          case 'boolean[]':
+            return `[false]`
           default:
             return undefined
         }
       }
 
-      const start = async () => {
+      const start = () => {
         const isWorkspaceLoaded = verifyWorkspaceLoaded()
         if (!isWorkspaceLoaded) {
           return
         }
-
         const isEditorOpen = verifyTextEditorOpen()
         if (!isEditorOpen) {
           return
         }
-
         const editor = vscode.window.activeTextEditor
-        const text = editor!.document.getText()
-
+        if (!editor) {
+          return
+        }
+        const text = editor.document.getText()
         const isTextInEditor = verifyTextInEditor(text)
         if (!isTextInEditor) {
           return
         }
-
         const isInterfaceInText = verifyInterfaceInText(text)
         if (!isInterfaceInText) {
           return
         }
-
         const interfaceName = getInterfaceName(text)
         if (!interfaceName) {
           return
         }
-
         const properties = getInterfaceProperties(text)
-        const types = getInterfacePropertyTypes(text)
-        if (!properties || !types) {
+        const datatypes = getInterfaceDatatypes(text)
+        if (!properties || !datatypes) {
           return
         }
-
-        const propertyDefinitions: string[] = []
-        const propertyLocalAssignments: string[] = []
-        const propertyExternalAssignments: string[] = []
-
-        properties.forEach((p, i) => {
-          const type = types[i]
-          const value = getInitalPropertyValue(type)
-          propertyDefinitions.push(`private ${p}: ${type} = ${value}`)
-          propertyLocalAssignments.push(`${p}: this.${p}`)
-          const propertyExternalAssignment = `public with${uppercaseFirstLetter(
-            p
-          )}(value: ${type}) {\r\n    this.${p} = value\r\n    return this\r\n  }`
-          propertyExternalAssignments.push(propertyExternalAssignment)
-        })
-
-        // TODO: Make the indenting prettier.
-        const classString = `export class ${getClassName(
-          interfaceName
-        )}Builder {
-  ${propertyDefinitions.join('\r\n  ')}
-
-  public build(): ${interfaceName} {
-    return {
-      ${propertyLocalAssignments.join(',\r\n      ')}
-    }
-  }
-
-  ${propertyExternalAssignments.join('\r\n\r\n  ')}
-}\r\n`
-
-        saveBuilderFile(editor!, classString)
+        const propertyOutput = generatePropertyOutput(properties, datatypes)
+        const classString = generateClass(interfaceName, propertyOutput)
+        saveBuilderFile(editor, classString)
       }
 
       start()
