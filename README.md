@@ -4,7 +4,7 @@ TypeScript Interface to Builder Class is a vscode extension that will save you t
 
 ## Features
 
-Stop wasting time manually writing out builder classes. Define an interface and use this extention to make your builder for you.
+Stop wasting time manually writing out builder classes. Define an interface and use this extention to generate your builder.
 
 ![Example](images/example.gif)
 
