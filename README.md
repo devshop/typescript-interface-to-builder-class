@@ -1,3 +1,5 @@
+![Banner](images/logo.png)
+
 # TypeScript Interface to Builder Class
 
 TypeScript Interface to Builder Class is a vscode extension that will save you time by automatically generating a builder class from a TypeScript interface.
