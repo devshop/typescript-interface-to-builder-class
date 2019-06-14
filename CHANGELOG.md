@@ -18,4 +18,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.1.2] - 2019-06-14
 
 ### Changed
-- Fixed issues when using camelCase file naming
+- Fixed issues when using camel case file naming
+
+## [0.1.3] - 2019-06-14
+
+### Changed
+- Corrected spelling mistakes in README
