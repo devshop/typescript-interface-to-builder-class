@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as path from 'path'
-// tslint:disable-next-line: no-implicit-dependencies
 import * as vscode from 'vscode'
 
 interface IPropertyOutput {
@@ -14,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     'extension.interfaceToBuilder',
     () => {
       const b = '\r\n' // line break
-      const t = '\t' // tab
+      const t = '  ' // tab (indenting)
 
       const uppercaseFirstLetter = (s: string) =>
         s.charAt(0).toUpperCase() + s.slice(1)
@@ -120,6 +119,8 @@ export function activate(context: vscode.ExtensionContext) {
           const value = getInitalPropertyValue(datatype)
           const className = uppercaseFirstLetter(p)
           output.definitions.push(`private ${p}: ${datatype} = ${value}`)
+          // Strip any '?' from optional properties
+          p = p.replace('?', '')
           output.localSetters.push(`${p}: this.${p}`)
           let propertyExternalSetter = ''
           propertyExternalSetter += `public with${className}(value: ${datatype}) {${b}`
@@ -178,7 +179,6 @@ export function activate(context: vscode.ExtensionContext) {
         )
       }
 
-      // TODO: Add support for optional types
       const getInitalPropertyValue = (datatype: string) => {
         switch (datatype) {
           case 'string':
