@@ -6,9 +6,9 @@ TypeScript Interface to Builder Class is a vscode extension that will save you t
 
 Stop wasting time manually writing out builder classes. Define an interface and use this extention to make your builder for you.
 
-\!\[Example\]\(images/example.gif\)
+![Example](images/example.gif)
 
-The generated file will be saved next to your interface file with `.buidler.ts` appended to the end of the original filename.
+The generated file will be saved next to your interface file with `.builder.ts` appended to the end of the original filename.
 
 If you're not already using builders, you should start. They are a great way to easily generate data for your unit tests.
 
