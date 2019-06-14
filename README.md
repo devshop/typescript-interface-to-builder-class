@@ -1,4 +1,4 @@
-![Banner](images/logo.png)
+![Banner](logo.png)
 
 # TypeScript Interface to Builder Class
 
@@ -8,7 +8,7 @@ TypeScript Interface to Builder Class is a vscode extension that will save you t
 
 Stop wasting time manually writing out builder classes. Define an interface and use this extention to generate your builder.
 
-![Example](images/example.gif)
+![Example](example.gif)
 
 The generated file will be saved next to your interface file with `.builder.ts` appended to the end of the original filename.
 
@@ -23,6 +23,7 @@ Here is an example of using the generated builder to create a user for a test sc
 Start with an interface file that you have written.
 
 **user.interface.ts**
+
 ```
 export interface IUser {
   firstName: string
@@ -58,15 +59,16 @@ const user: IUser = new UserBuilder()
 ## Requirements
 
 To use the extension:
-* You must have a folder open in Visual Studio Code
-* You must have an interface file open
-* Your interface must include the text `export interface`
-* You need to have at least one property defined with a datatype e.g. `firstName: string`
+
+- You must have a folder open in Visual Studio Code
+- You must have an interface file open
+- Your interface must include the text `export interface`
+- You need to have at least one property defined with a datatype e.g. `firstName: string`
 
 ## Known Issues
 
-* Any required imports will have to be added manually after the builder is generated.
-* If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the inital value will be `undefined` which will not compile unless the property is optional. These values will need to entered manually.
+- Any required imports will have to be added manually after the builder is generated.
+- If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the inital value will be `undefined` which will not compile unless the property is optional. These values will need to entered manually.
 
 ## Release Notes
 
