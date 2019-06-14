@@ -1,4 +1,4 @@
-![Banner](logo.png)
+![Banner](images/logo.png)
 
 # TypeScript Interface to Builder Class
 
@@ -8,7 +8,7 @@ TypeScript Interface to Builder Class is a vscode extension that will save you t
 
 Stop wasting time manually writing out builder classes. Define an interface and use this extention to generate your builder.
 
-![Example](example.gif)
+![Example](images/example.gif)
 
 The generated file will be saved next to your interface file with `.builder.ts` appended to the end of the original filename.
 

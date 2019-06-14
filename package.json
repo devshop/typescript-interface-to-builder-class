@@ -1,16 +1,19 @@
 {
   "name": "typescript-interface-to-builder-class",
   "publisher": "frasercrosbie",
-  "repository": "github:devshop/typescript-interface-to-builder-class",
   "displayName": "TypeScript Interface to Builder Class",
   "description": "Generate a builder class from a TypeScript interface.",
-  "icon": "icon.png",
+  "icon": "images/icon.png",
   "author": {
     "name": "Fraser Crosbie"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bugs": {
     "url": "https://github.com/devshop/typescript-interface-to-builder-class/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devshop/typescript-interface-to-builder-class.git"
   },
   "engines": {
     "vscode": "^1.35.0"
