@@ -4,7 +4,7 @@
 
 TypeScript Interface to Builder Class is a Visual Studio Code extension that will save you time by automatically generating a builder class from a TypeScript interface.
 
-[Visual Studio Markertplace Page](https://marketplace.visualstudio.com/items?itemName=FraserCrosbie.typescript-interface-to-builder-class)
+[Visual Studio Marketplace Page](https://marketplace.visualstudio.com/items?itemName=FraserCrosbie.typescript-interface-to-builder-class)
 
 ## Features
 
