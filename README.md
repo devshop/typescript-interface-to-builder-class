@@ -12,7 +12,7 @@ Stop wasting time manually writing out builder classes. Define an interface and 
 
 ![Example](images/example.gif)
 
-The generated file will be saved next to your interface file with `.builder.ts` appended to the end of the original filename.
+The generated file will be saved next to your interface file.
 
 If you're not already using builders, you should start. They are a great way to easily generate data for your unit tests.
 
