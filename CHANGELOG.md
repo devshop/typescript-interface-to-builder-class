@@ -24,3 +24,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Corrected spelling mistakes in README
+
+## [0.1.4] - 2019-06-26
+
+### Changed
+- Added support for semi-colon line endings

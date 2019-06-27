@@ -14,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     () => {
       const b = '\r\n' // line break
       const t = '  ' // tab (indenting)
+      let e = '' // line-ending (semi-colon)
 
       const uppercaseFirstLetter = (s: string) =>
         s.charAt(0).toUpperCase() + s.slice(1)
@@ -58,6 +59,15 @@ export function activate(context: vscode.ExtensionContext) {
         return true
       }
 
+      const getLineEndings = (text: string) => {
+        const semiColons = text.includes(';')
+        if (semiColons) {
+          return ';'
+        } else {
+          return ''
+        }
+      }
+
       const getInterfaceName = (text: string) => {
         // Search for the first word after "export interface"
         // to find the name of the interface.
@@ -95,7 +105,7 @@ export function activate(context: vscode.ExtensionContext) {
       const getInterfaceDatatypes = (text: string) => {
         // Find all the property types defined in the interface
         // by looking for words after a colon(:)
-        const datatypes = text.match(/(?<=:\s)(.*)/g)
+        const datatypes = text.match(/(?<=:\s)([^\n\r;]+)/g)
         if (!datatypes) {
           vscode.window.showErrorMessage(
             'Could not find any datatypes defined in the interface.'
@@ -118,14 +128,14 @@ export function activate(context: vscode.ExtensionContext) {
           const datatype = datatypes[i]
           const value = getInitalPropertyValue(datatype)
           const className = uppercaseFirstLetter(p)
-          output.definitions.push(`private ${p}: ${datatype} = ${value}`)
+          output.definitions.push(`private ${p}: ${datatype} = ${value}${e}`)
           // Strip any '?' from optional properties
           p = p.replace('?', '')
           output.localSetters.push(`${p}: this.${p}`)
           let propertyExternalSetter = ''
           propertyExternalSetter += `public with${className}(value: ${datatype}) {${b}`
-          propertyExternalSetter += `${t}${t}this.${p} = value${b}`
-          propertyExternalSetter += `${t}${t}return this${b}`
+          propertyExternalSetter += `${t}${t}this.${p} = value${e}${b}`
+          propertyExternalSetter += `${t}${t}return this${e}${b}`
           propertyExternalSetter += `${t}}`
           output.externalSetters.push(propertyExternalSetter)
         })
@@ -146,7 +156,7 @@ export function activate(context: vscode.ExtensionContext) {
         classString += `${t}public build(): ${interfaceName} {${b}`
         classString += `${t}${t}return {${b}`
         classString += `${t}${t}${t}${localSetters}${b}`
-        classString += `${t}${t}}${b}`
+        classString += `${t}${t}}${e}${b}`
         classString += `${t}}${b}${b}`
         classString += `${t}${externalSetters}${b}`
         classString += `}${b}`
@@ -226,6 +236,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!isInterfaceInText) {
           return
         }
+        e = getLineEndings(text)
         const interfaceName = getInterfaceName(text)
         if (!interfaceName) {
           return
