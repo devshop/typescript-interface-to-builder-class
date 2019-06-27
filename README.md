@@ -4,13 +4,15 @@
 
 TypeScript Interface to Builder Class is a Visual Studio Code extension that will save you time by automatically generating a builder class from a TypeScript interface.
 
+[Visual Studio Marketplace Page](https://marketplace.visualstudio.com/items?itemName=FraserCrosbie.typescript-interface-to-builder-class)
+
 ## Features
 
-Stop wasting time manually writing out builder classes. Define an interface and use this extension to generate your builder.
+Stop wasting time manually writing out builder classes. Use this extension to instantly generate a builder from an interface.
 
 ![Example](images/example.gif)
 
-The generated file will be saved next to your interface file with `.builder.ts` or `Builder.ts` appended to the end of the original filename.
+The generated file will be in the same folder as your interface file.
 
 If you're not already using builders, you should start. They are a great way to easily generate data for your unit tests.
 
@@ -35,9 +37,7 @@ export interface IUser {
 
 Run the extension `Cmd/Ctrl + Shift + P => Generate Builder Class From TypeScript Interface`.
 
-Manually update the generated file to take care of any required imports and set the default values.
-
-Import the generated file into your test class.
+Manually update the generated file to take care of any required imports and to set the default values.
 
 To create a new user with the default values defined in the builder class use the following code.
 
