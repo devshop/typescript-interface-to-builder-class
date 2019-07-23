@@ -39,3 +39,10 @@
 - Reduce the extension size and improve the startup time by [bundling your extension](https://code.visualstudio.com/api/working-with-extensions/testing-extension).
 - [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VSCode extension marketplace.
 - Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+
+## Packaging
+
+- Update version in package.json
+- `npm install -g vsce`
+- `vsce package`
+- Upload generated vsix file to [Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/frasercrosbie)
