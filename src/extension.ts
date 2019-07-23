@@ -127,7 +127,8 @@ export function activate(context: vscode.ExtensionContext) {
         properties.forEach((p, i) => {
           const datatype = datatypes[i]
           const value = getInitalPropertyValue(datatype)
-          const className = uppercaseFirstLetter(p)
+          let className = uppercaseFirstLetter(p)
+          className = className.replace('?', '')
           output.definitions.push(`private ${p}: ${datatype} = ${value}${e}`)
           // Strip any '?' from optional properties
           p = p.replace('?', '')
@@ -196,6 +197,10 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const getInitalPropertyValue = (datatype: string) => {
+        if (datatype.includes('[]')) {
+          return '[]'
+        }
+
         switch (datatype) {
           case 'string':
             return undefined
@@ -203,12 +208,6 @@ export function activate(context: vscode.ExtensionContext) {
             return 1
           case 'boolean':
             return false
-          case 'string[]':
-            return `[undefined]`
-          case 'number[]':
-            return `[1]`
-          case 'boolean[]':
-            return `[false]`
           default:
             return undefined
         }
