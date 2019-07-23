@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     () => {
       const b = '\r\n' // line break
       const t = '  ' // tab (indenting)
-      let e = '' // line-ending (semi-colon)
+      let e = '' // line-ending (semicolon)
 
       const uppercaseFirstLetter = (s: string) =>
         s.charAt(0).toUpperCase() + s.slice(1)
@@ -60,8 +60,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const getLineEndings = (text: string) => {
-        const semiColons = text.includes(';')
-        if (semiColons) {
+        const semicolon = text.includes(';')
+        if (semicolon) {
           return ';'
         } else {
           return ''
