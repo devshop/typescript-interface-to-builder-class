@@ -1,5 +1,8 @@
 out
 node_modules
 .vscode-test/
-*.vsix
+packaged_vsix/
+coverage/
 slnx.sqlite
+*.vsix
+.DS_Store

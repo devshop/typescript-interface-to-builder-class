@@ -29,3 +29,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Added support for semi-colon line endings
+
+## [0.1.5] - 2019-07-23
+
+### Fixed
+- Fixed issue with method naming of optional properties
+
+## [0.1.6] - 2019-07-27
+
+### Changed
+- Split up code
+- Added unit tests
+- Added code coverage
