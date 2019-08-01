@@ -1,5 +1,5 @@
 import { WorkspaceFolder } from 'vscode'
-import { IVSCodeWindow } from '../interfaces/vscode.interfaces'
+import { IWindow } from '../interfaces/window.interface'
 
 export const getWorkspaceFolder = (
   folders: WorkspaceFolder[] | undefined
@@ -8,16 +8,13 @@ export const getWorkspaceFolder = (
     return ''
   }
 
-  const folder = folders[0] || {}
+  const folder = folders[0]
   const uri = folder.uri
 
   return uri.fsPath
 }
 
-export const isWorkspaceLoaded = (
-  workspaceRoot: string,
-  window: IVSCodeWindow
-) => {
+export const isWorkspaceLoaded = (workspaceRoot: string, window: IWindow) => {
   if (workspaceRoot === '') {
     window.showErrorMessage(
       'Please open a directory before creating a builder.'
@@ -27,7 +24,7 @@ export const isWorkspaceLoaded = (
   return true
 }
 
-export const isTextEditorOpen = (window: IVSCodeWindow) => {
+export const isTextEditorOpen = (window: IWindow) => {
   if (!window.activeTextEditor) {
     window.showErrorMessage(
       'No open text editor. Please open an interface file.'
@@ -37,7 +34,7 @@ export const isTextEditorOpen = (window: IVSCodeWindow) => {
   return true
 }
 
-export const isTextInEditor = (text: string | null, window: IVSCodeWindow) => {
+export const isTextInEditor = (text: string | null, window: IWindow) => {
   if (!text) {
     window.showErrorMessage('No text found. Please open an interface file.')
     return false

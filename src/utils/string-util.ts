@@ -1,4 +1,4 @@
-import { IVSCodeWindow } from '../interfaces/vscode.interfaces'
+import { IWindow } from '../interfaces/window.interface'
 
 export const uppercaseFirstLetter = (s: string) =>
   s.charAt(0).toUpperCase() + s.slice(1)
@@ -12,7 +12,7 @@ export const getLineEndings = (text: string) => {
   }
 }
 
-export const getInterfaceName = (text: string, window: IVSCodeWindow) => {
+export const getInterfaceName = (text: string, window: IWindow) => {
   // Search for the first word after "export interface"
   // to find the name of the interface.
   const interfaceNames = text.match(/(?<=\bexport interface\s)(\w+)/)
@@ -32,7 +32,7 @@ export const getClassName = (text: string) => {
   return text
 }
 
-export const getInterfaceProperties = (text: string, window: IVSCodeWindow) => {
+export const getInterfaceProperties = (text: string, window: IWindow) => {
   // Find all the properties defined in the interface
   // by looking for words before a colon(:)
   const properties = text.match(/(\w*[^\s])(?=:)/gm)
@@ -45,7 +45,7 @@ export const getInterfaceProperties = (text: string, window: IVSCodeWindow) => {
   return properties
 }
 
-export const getInterfaceDatatypes = (text: string, window: IVSCodeWindow) => {
+export const getInterfaceDatatypes = (text: string, window: IWindow) => {
   // Find all the property types defined in the interface
   // by looking for words after a colon(:)
   const datatypes = text.match(/(?<=:\s)([^\n\r;]+)/g)

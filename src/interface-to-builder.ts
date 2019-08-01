@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as vscode from 'vscode'
 import { IPropertyOutput } from './interfaces/property-output.interface'
-import { IVSCodeWindow } from './interfaces/vscode.interfaces'
+import { IWindow } from './interfaces/window.interface'
 import {
   getClassName,
   getInitalPropertyValue,
@@ -22,12 +22,18 @@ const lineBreak = '\r\n'
 const indent = '  ' // (e.g. tab vs spaces)
 let lineEnding = '' // line-ending (e.g. semicolon)
 
-export const execute = (workspaceRoot: string, window: IVSCodeWindow) => {
+export const execute = (workspaceRoot: string, window: IWindow) => {
   if (!isWorkspaceLoaded(workspaceRoot, window)) return
   if (!isTextEditorOpen(window)) return
   const editor = window.activeTextEditor
   const text = editor.document.getText()
   if (!isTextInEditor(text, window)) return
+  if (text.includes('(')) {
+    window.showErrorMessage(
+      'Methods defined in interfaces are not currently supported.'
+    )
+    return
+  }
   lineEnding = getLineEndings(text)
   const interfaceName = getInterfaceName(text, window)
   if (!interfaceName) return
@@ -95,7 +101,7 @@ export const generateClass = (
 }
 
 export const saveBuilderFile = (
-  window: IVSCodeWindow,
+  window: IWindow,
   editor: vscode.TextEditor,
   text: string
 ) => {
@@ -107,21 +113,18 @@ export const saveBuilderFile = (
   if (numOfDots > 1) {
     builder = '.builder'
   }
-  let folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
-  if (!folderPath) {
-    folderPath = filePath.substring(0, filePath.lastIndexOf('\\'))
-  }
+
   // Writes the file to the current editor directory
-  fs.writeFile(path.join(folderPath, `${fileName}${builder}.ts`), text, err => {
-    if (err) {
-      window.showErrorMessage(`File save failed: ${err}`)
-      return
-    }
-  })
-  window.showInformationMessage(
-    `Builder class saved to: ${path.join(
-      folderPath,
-      `${fileName}${builder}.ts`
-    )}`
-  )
+  try {
+    const folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
+    fs.writeFileSync(path.join(folderPath, `${fileName}${builder}.ts`), text)
+    window.showInformationMessage(
+      `Builder class saved to: ${path.join(
+        folderPath,
+        `${fileName}${builder}.ts`
+      )}`
+    )
+  } catch (err) {
+    window.showErrorMessage(`File save failed: ${err}`)
+  }
 }

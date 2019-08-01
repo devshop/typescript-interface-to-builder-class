@@ -1,4 +1,9 @@
+import * as fs from 'fs'
 import * as interfaceToBuilder from './interface-to-builder'
+import { IPropertyOutput } from './interfaces/property-output.interface'
+import { PropertyOutputBuilder } from './interfaces/property-output.interface.builder'
+
+jest.mock('fs')
 
 describe('Interface To Builder', () => {
   const testRoot = 'fake/path/to/test'
@@ -73,6 +78,43 @@ describe('Interface To Builder', () => {
 
     interfaceToBuilder.execute(testRoot, windowMock as any)
 
+    expect(windowMock.showErrorMessage).toHaveBeenCalled()
+    expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
+    expect(interfaceToBuilder.generateClass).not.toHaveBeenCalled()
+    expect(interfaceToBuilder.saveBuilderFile).not.toHaveBeenCalled()
+  })
+
+  it('should stop execution if a method is found in the active text editor', () => {
+    const windowMock = {
+      activeTextEditor: {
+        document: {
+          getText: jest
+            .fn()
+            .mockReturnValue(
+              'export interface ITest { foo(bar: string): string }'
+            )
+        }
+      },
+      showErrorMessage: jest.fn()
+    }
+
+    jest.mock('./utils/workspace-util', () => ({
+      isTextEditorOpen: jest.fn().mockReturnValue(true)
+    }))
+
+    jest.mock('./utils/string-util', () => ({
+      isTextInEditor: jest.fn().mockReturnValue(true)
+    }))
+
+    jest.spyOn(interfaceToBuilder, 'generatePropertyOutput')
+    jest.spyOn(interfaceToBuilder, 'generateClass')
+    jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
+
+    interfaceToBuilder.execute(testRoot, windowMock as any)
+
+    expect(windowMock.showErrorMessage).toHaveBeenCalledWith(
+      'Methods defined in interfaces are not currently supported.'
+    )
     expect(windowMock.showErrorMessage).toHaveBeenCalled()
     expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
     expect(interfaceToBuilder.generateClass).not.toHaveBeenCalled()
@@ -235,5 +277,152 @@ describe('Interface To Builder', () => {
     expect(interfaceToBuilder.generatePropertyOutput).toHaveBeenCalled()
     expect(interfaceToBuilder.generateClass).toHaveBeenCalled()
     expect(interfaceToBuilder.saveBuilderFile).toHaveBeenCalled()
+  })
+
+  it('should generate the property output text', () => {
+    const propertyOutput: IPropertyOutput = new PropertyOutputBuilder()
+      .withDefinitions(['private firstName: string = undefined'])
+      .withExternalSetters([
+        `public withFirstName(value: string) {
+          this.firstName = value
+          return this
+        }`
+      ])
+      .withLocalSetters(['firstName: this.firstName'])
+      .build()
+
+    const output = interfaceToBuilder.generatePropertyOutput(
+      ['firstName'],
+      ['string']
+    )
+
+    expect(output.definitions[0].replace(/\s+/g, '')).toEqual(
+      propertyOutput.definitions[0].replace(/\s+/g, '')
+    )
+    expect(output.externalSetters[0].replace(/\s+/g, '')).toEqual(
+      propertyOutput.externalSetters[0].replace(/\s+/g, '')
+    )
+    expect(output.localSetters[0].replace(/\s+/g, '')).toEqual(
+      propertyOutput.localSetters[0].replace(/\s+/g, '')
+    )
+  })
+
+  it('should generate the class text', () => {
+    const propertyOutput: IPropertyOutput = new PropertyOutputBuilder()
+      .withDefinitions([
+        'private firstName: string = undefined',
+        'private lastName: string = undefined',
+        'private age: number = 1'
+      ])
+      .withExternalSetters([
+        `public withFirstName(value: string) {
+          this.firstName = value
+          return this
+        }`,
+        `public withLastName(value: string) {
+          this.lastName = value
+          return this
+        }`,
+        `public withAge(value: number) {
+          this.age = value
+          return this
+        }`
+      ])
+      .withLocalSetters([
+        'firstName: this.firstName',
+        'lastName: this.lastName',
+        'age: this.age'
+      ])
+      .build()
+
+    const classString = interfaceToBuilder.generateClass('Foo', propertyOutput)
+
+    expect(classString.replace(/\s+/g, '')).toBe(
+      `export class FooBuilder {
+        private firstName: string = undefined
+        private lastName: string = undefined
+        private age: number = 1
+
+        public build(): Foo {
+          return {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            age: this.age
+          }
+        }
+
+        public withFirstName(value: string) {
+          this.firstName = value
+          return this
+        }
+
+        public withLastName(value: string) {
+          this.lastName = value
+          return this
+        }
+
+        public withAge(value: number) {
+          this.age = value
+          return this
+        }
+      }`.replace(/\s+/g, '')
+    )
+  })
+
+  it('should save the builder file', () => {
+    const windowMock = {
+      activeTextEditor: {
+        document: {
+          getText: jest
+            .fn()
+            .mockReturnValue('export interface ITest { foo: string }'),
+          uri: {
+            fsPath: `${testRoot}/bar.interface.ts`
+          }
+        }
+      },
+      showErrorMessage: jest.fn(),
+      showInformationMessage: jest.fn()
+    }
+
+    interfaceToBuilder.saveBuilderFile(
+      windowMock as any,
+      windowMock.activeTextEditor as any,
+      'foo'
+    )
+
+    expect(fs.writeFileSync).toHaveBeenCalledTimes(1)
+    expect(windowMock.showErrorMessage).not.toHaveBeenCalled()
+    expect(windowMock.showInformationMessage).toHaveBeenCalled()
+  })
+
+  it('should show error message when saving file fails', () => {
+    const windowMock = {
+        activeTextEditor: {
+          document: {
+            getText: jest
+              .fn()
+              .mockReturnValue('export interface ITest { foo: string }'),
+            uri: {
+              fsPath: `${testRoot}/bar.interface.ts`
+            }
+          }
+        },
+        showErrorMessage: jest.fn(),
+        showInformationMessage: jest.fn()
+      }
+      // tslint:disable-next-line: variable-name
+    ;(fs.writeFileSync as any).mockImplementation(() => {
+      throw new Error('Some error')
+    })
+
+    interfaceToBuilder.saveBuilderFile(
+      windowMock as any,
+      windowMock.activeTextEditor as any,
+      'foo'
+    )
+
+    expect(windowMock.showErrorMessage).toHaveBeenCalled()
+    expect(windowMock.showInformationMessage).not.toHaveBeenCalled()
   })
 })
