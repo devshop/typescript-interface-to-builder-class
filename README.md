@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/devshop/typescript-interface-to-builder-class/branch/master/graph/badge.svg)](https://codecov.io/gh/devshop/typescript-interface-to-builder-class)
+
 ![Banner](images/logo.png)
 
 # TypeScript Interface to Builder Class
