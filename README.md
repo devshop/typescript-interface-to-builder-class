@@ -1,6 +1,4 @@
-[![codecov](https://codecov.io/gh/devshop/typescript-interface-to-builder-class/branch/master/graph/badge.svg)](https://codecov.io/gh/devshop/typescript-interface-to-builder-class)
-
-[![Build Status](https://travis-ci.com/devshop/typescript-interface-to-builder-class.svg?branch=master)](https://travis-ci.com/devshop/typescript-interface-to-builder-class)
+[![codecov](https://codecov.io/gh/devshop/typescript-interface-to-builder-class/branch/master/graph/badge.svg)](https://codecov.io/gh/devshop/typescript-interface-to-builder-class) [![Build Status](https://travis-ci.com/devshop/typescript-interface-to-builder-class.svg?branch=master)](https://travis-ci.com/devshop/typescript-interface-to-builder-class)
 
 ![Banner](images/logo.png)
 
