@@ -6,3 +6,4 @@ coverage/
 slnx.sqlite
 *.vsix
 .DS_Store
+.vs/
