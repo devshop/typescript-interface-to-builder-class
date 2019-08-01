@@ -69,3 +69,4 @@ To use the extension:
 
 - Any required imports will have to be added manually after the builder is generated.
 - If your property has an [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `foo: keyof IFoo` the initial value will be `undefined` which will not compile unless the property is optional. These values will need to manually entered.
+- If you have methods defined in your interface the builder will not be generated.
