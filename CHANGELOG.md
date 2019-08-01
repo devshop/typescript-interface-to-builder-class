@@ -35,9 +35,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 - Fixed issue with method naming of optional properties
 
-## [0.1.6] - 2019-07-27
+## [0.1.6] - 2019-07-31
 
 ### Changed
 - Split up code
 - Added unit tests
 - Added code coverage
+
+## [0.1.7] - 2019-07-31
+
+### Changed
+- Added build and coverage badges to README.md
