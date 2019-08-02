@@ -1,8 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as vscode from 'vscode'
-import { IPropertyOutput } from './interfaces/property-output.interface'
-import { IWindow } from './interfaces/window.interface'
+
 import {
   getClassName,
   getInitalPropertyValue,
@@ -17,6 +16,9 @@ import {
   isTextInEditor,
   isWorkspaceLoaded
 } from './utils/workspace-util'
+
+import { IPropertyOutput } from './interfaces/property-output.interface'
+import { IWindow } from './interfaces/window.interface'
 
 const lineBreak = '\r\n'
 const indent = '  ' // (e.g. tab vs spaces)
@@ -116,7 +118,10 @@ export const saveBuilderFile = (
 
   // Writes the file to the current editor directory
   try {
-    const folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
+    let folderPath = filePath.substring(0, filePath.lastIndexOf('/'))
+    if (!folderPath) {
+      folderPath = filePath.substring(0, filePath.lastIndexOf('\\'))
+    }
     fs.writeFileSync(path.join(folderPath, `${fileName}${builder}.ts`), text)
     window.showInformationMessage(
       `Builder class saved to: ${path.join(

@@ -46,3 +46,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 - Added build and coverage badges to README.md
+
+## [0.1.8] - 2019-07-31
+
+### Fixed
+- Fixed issue with save path on Windows
