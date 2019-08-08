@@ -1,12 +1,14 @@
 import * as fs from 'fs'
 import * as interfaceToBuilder from './interface-to-builder'
+
 import { IPropertyOutput } from './interfaces/property-output.interface'
 import { PropertyOutputBuilder } from './interfaces/property-output.interface.builder'
 
 jest.mock('fs')
 
 describe('Interface To Builder', () => {
-  const testRoot = 'fake/path/to/test'
+  const testRootLinux = 'fake/path/to/test'
+  const testRootWindows = 'fake\\path\\to\\test'
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -44,7 +46,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalledWith(
       'No open text editor. Please open an interface file.'
@@ -76,7 +78,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalled()
     expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
@@ -110,7 +112,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalledWith(
       'Methods defined in interfaces are not currently supported.'
@@ -143,7 +145,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalledWith(
       'Could not find the interface name.'
@@ -175,7 +177,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalled()
     expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
@@ -191,7 +193,7 @@ describe('Interface To Builder', () => {
             .fn()
             .mockReturnValue('export interface ITest { foo: string }'),
           uri: {
-            fsPath: `${testRoot}/bar.ts`
+            fsPath: `${testRootLinux}/bar.ts`
           }
         }
       },
@@ -211,7 +213,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).not.toHaveBeenCalled()
     expect(windowMock.showInformationMessage).toHaveBeenCalled()
@@ -242,7 +244,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).toHaveBeenCalled()
     expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
@@ -258,7 +260,7 @@ describe('Interface To Builder', () => {
             .fn()
             .mockReturnValue('export interface ITest { foo: string }'),
           uri: {
-            fsPath: `${testRoot}/bar.interface.ts`
+            fsPath: `${testRootLinux}/bar.interface.ts`
           }
         }
       },
@@ -270,7 +272,7 @@ describe('Interface To Builder', () => {
     jest.spyOn(interfaceToBuilder, 'generateClass')
     jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
 
-    interfaceToBuilder.execute(testRoot, windowMock as any)
+    interfaceToBuilder.execute(testRootLinux, windowMock as any)
 
     expect(windowMock.showErrorMessage).not.toHaveBeenCalled()
     expect(windowMock.showInformationMessage).toHaveBeenCalled()
@@ -369,7 +371,7 @@ describe('Interface To Builder', () => {
     )
   })
 
-  it('should save the builder file', () => {
+  it('should save the builder file in linux os', () => {
     const windowMock = {
       activeTextEditor: {
         document: {
@@ -377,7 +379,34 @@ describe('Interface To Builder', () => {
             .fn()
             .mockReturnValue('export interface ITest { foo: string }'),
           uri: {
-            fsPath: `${testRoot}/bar.interface.ts`
+            fsPath: `${testRootLinux}/bar.interface.ts`
+          }
+        }
+      },
+      showErrorMessage: jest.fn(),
+      showInformationMessage: jest.fn()
+    }
+
+    interfaceToBuilder.saveBuilderFile(
+      windowMock as any,
+      windowMock.activeTextEditor as any,
+      'foo'
+    )
+
+    expect(fs.writeFileSync).toHaveBeenCalledTimes(1)
+    expect(windowMock.showErrorMessage).not.toHaveBeenCalled()
+    expect(windowMock.showInformationMessage).toHaveBeenCalled()
+  })
+
+  it('should save the builder file in windows os', () => {
+    const windowMock = {
+      activeTextEditor: {
+        document: {
+          getText: jest
+            .fn()
+            .mockReturnValue('export interface ITest { foo: string }'),
+          uri: {
+            fsPath: `${testRootWindows}\\bar.interface.ts`
           }
         }
       },
@@ -404,7 +433,7 @@ describe('Interface To Builder', () => {
               .fn()
               .mockReturnValue('export interface ITest { foo: string }'),
             uri: {
-              fsPath: `${testRoot}/bar.interface.ts`
+              fsPath: `${testRootLinux}/bar.interface.ts`
             }
           }
         },

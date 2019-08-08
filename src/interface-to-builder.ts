@@ -2,15 +2,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as vscode from 'vscode'
 
-import {
-  getClassName,
-  getInitalPropertyValue,
-  getInterfaceDatatypes,
-  getInterfaceName,
-  getInterfaceProperties,
-  getLineEndings,
-  uppercaseFirstLetter
-} from './utils/string-util'
+import { getClassName, getInterfaceName } from './utils/interface-name-util'
+import { getLineEndings, uppercaseFirstLetter } from './utils/string-util'
 import {
   isTextEditorOpen,
   isTextInEditor,
@@ -19,6 +12,9 @@ import {
 
 import { IPropertyOutput } from './interfaces/property-output.interface'
 import { IWindow } from './interfaces/window.interface'
+import { getInitalPropertyValue } from './utils/initial-property-value-util'
+import { getInterfaceDatatypes } from './utils/interface-datatypes-util'
+import { getInterfaceProperties } from './utils/interface-properties-util'
 
 const lineBreak = '\r\n'
 const indent = '  ' // (e.g. tab vs spaces)
