@@ -222,36 +222,6 @@ describe('Interface To Builder', () => {
     expect(interfaceToBuilder.saveBuilderFile).toHaveBeenCalled()
   })
 
-  it('should stop execution if no properties are found in the active text editor', () => {
-    const windowMock = {
-      activeTextEditor: {
-        document: {
-          getText: jest.fn().mockReturnValue('export interface ITest {}')
-        }
-      },
-      showErrorMessage: jest.fn()
-    }
-
-    jest.mock('./utils/workspace-util', () => ({
-      isTextEditorOpen: jest.fn().mockReturnValue(true)
-    }))
-
-    jest.mock('./utils/string-util', () => ({
-      isTextInEditor: jest.fn().mockReturnValue(true)
-    }))
-
-    jest.spyOn(interfaceToBuilder, 'generatePropertyOutput')
-    jest.spyOn(interfaceToBuilder, 'generateClass')
-    jest.spyOn(interfaceToBuilder, 'saveBuilderFile')
-
-    interfaceToBuilder.execute(testRootLinux, windowMock as any)
-
-    expect(windowMock.showErrorMessage).toHaveBeenCalled()
-    expect(interfaceToBuilder.generatePropertyOutput).not.toHaveBeenCalled()
-    expect(interfaceToBuilder.generateClass).not.toHaveBeenCalled()
-    expect(interfaceToBuilder.saveBuilderFile).not.toHaveBeenCalled()
-  })
-
   it('should save the file with `.builder` if a `.` is found in the filename', () => {
     const windowMock = {
       activeTextEditor: {

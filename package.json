@@ -45,14 +45,14 @@
     "test:integration": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/node": "^10.12.21",
+    "@types/jest": "^24.0.17",
+    "@types/node": "^12.7.1",
     "jest": "^24.8.0",
     "prettier": "1.18.2",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.12.1",
+    "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.3.1",
-    "vscode": "^1.1.28"
+    "typescript": "^3.5.3",
+    "vscode": "^1.1.36"
   }
 }

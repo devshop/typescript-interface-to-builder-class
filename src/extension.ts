@@ -1,6 +1,7 @@
-import { commands, ExtensionContext, window, workspace } from 'vscode'
-import { execute } from './interface-to-builder'
+import { commands, window, workspace } from 'vscode'
+
 import { IWindow } from './interfaces/window.interface'
+import { execute } from './interface-to-builder'
 import { getWorkspaceFolder } from './utils/workspace-util'
 
 export const activate = () => {
