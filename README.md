@@ -1,4 +1,4 @@
-[![Travis Build Status][travis-img]][travis] [![codecov][codecov-img]][codecov] [![Visual Studio Marketplace][vsmarket-img][vsmarket]
+[![Travis Build Status][travis-img]][travis] [![codecov][codecov-img]][codecov] [![Visual Studio Marketplace][vsmarket-img]][vsmarket]
 
 [travis]: https://travis-ci.com/devshop/typescript-interface-to-builder-class
 [travis-img]: https://travis-ci.com/devshop/typescript-interface-to-builder-class.svg?branch=master
