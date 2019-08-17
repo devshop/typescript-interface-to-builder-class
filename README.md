@@ -6,7 +6,7 @@
 [codecov]: https://codecov.io/gh/devshop/typescript-interface-to-builder-class
 [vsmarket]: https://marketplace.visualstudio.com/items?itemName=frasercrosbie.typescript-interface-to-builder-class
 [vsmarket-img]: https://vsmarketplacebadge.apphb.com/version/frasercrosbie.typescript-interface-to-builder-class.svg
-[david-dm]: https://david-dm.org/devshop/typescript-interface-to-builder-class
+[david-dm]: https://david-dm.org/devshop/typescript-interface-to-builder-class?type=dev
 [david-dm-img]: https://david-dm.org/devshop/typescript-interface-to-builder-class/dev-status.svg
 
 ![Banner](images/logo.png)
