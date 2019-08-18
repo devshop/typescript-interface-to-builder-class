@@ -1,30 +1,30 @@
-import { getInterfaceDatatypes } from './interface-datatypes-util'
+import { getInterfaceDataTypes } from './interface-data-types-util'
 
 describe('Interface Datatypes Util', () => {
-  it('should return null and an error message if no datatypes are found in the file', () => {
+  it('should return null and an error message if no data types are found in the file', () => {
     const windowMock = {
       showErrorMessage: jest.fn()
     }
-    const datatypes = getInterfaceDatatypes(
+    const dataTypes = getInterfaceDataTypes(
       `export interface ITest {}`,
       windowMock as any
     )
-    expect(datatypes).toBe(null)
+    expect(dataTypes).toBe(null)
     expect(windowMock.showErrorMessage).toHaveBeenCalled()
   })
 
-  it('should return a list of datatypes and no error message if datatypes are found in the file', () => {
+  it('should return a list of data types and no error message if data types are found in the file', () => {
     const windowMock = {
       showErrorMessage: jest.fn()
     }
-    const datatypes = getInterfaceDatatypes(
+    const dataTypes = getInterfaceDataTypes(
       `export interface ITest {
         foo: string
         bar: number
       }`,
       windowMock as any
     )
-    expect(datatypes).toEqual(['string', 'number'])
+    expect(dataTypes).toEqual(['string', 'number'])
     expect(windowMock.showErrorMessage).not.toHaveBeenCalled()
   })
 })

@@ -13,7 +13,7 @@ import {
 import { IPropertyOutput } from './interfaces/property-output.interface'
 import { IWindow } from './interfaces/window.interface'
 import { getInitalPropertyValue } from './utils/initial-property-value-util'
-import { getInterfaceDatatypes } from './utils/interface-datatypes-util'
+import { getInterfaceDataTypes } from './utils/interface-data-types-util'
 import { getInterfaceProperties } from './utils/interface-properties-util'
 
 const lineBreak = '\r\n'
@@ -36,16 +36,16 @@ export const execute = (workspaceRoot: string, window: IWindow) => {
   const interfaceName = getInterfaceName(text, window)
   if (!interfaceName) return
   const properties = getInterfaceProperties(text, window)
-  const datatypes = getInterfaceDatatypes(text, window)
-  if (!properties || !datatypes) return
-  const propertyOutput = generatePropertyOutput(properties, datatypes)
+  const dataTypes = getInterfaceDataTypes(text, window)
+  if (!properties || !dataTypes) return
+  const propertyOutput = generatePropertyOutput(properties, dataTypes)
   const classString = generateClass(interfaceName, propertyOutput)
   saveBuilderFile(window, editor, classString)
 }
 
 export const generatePropertyOutput = (
   properties: string[],
-  datatypes: string[]
+  dataTypes: string[]
 ): IPropertyOutput => {
   const output: IPropertyOutput = {
     definitions: [],
@@ -56,16 +56,16 @@ export const generatePropertyOutput = (
     const t = indent
     const b = lineBreak
     const e = lineEnding
-    const datatype = datatypes[i]
-    const value = getInitalPropertyValue(datatype)
+    const dataType = dataTypes[i]
+    const value = getInitalPropertyValue(dataType)
     let className = uppercaseFirstLetter(p)
     className = className.replace('?', '')
-    output.definitions.push(`private ${p}: ${datatype} = ${value}${e}`)
+    output.definitions.push(`private ${p}: ${dataType} = ${value}${e}`)
     // Strip any '?' from optional properties
     p = p.replace('?', '')
     output.localSetters.push(`${p}: this.${p}`)
     let propertyExternalSetter = ''
-    propertyExternalSetter += `public with${className}(value: ${datatype}) {${b}`
+    propertyExternalSetter += `public with${className}(value: ${dataType}) {${b}`
     propertyExternalSetter += `${t}${t}this.${p} = value${e}${b}`
     propertyExternalSetter += `${t}${t}return this${e}${b}`
     propertyExternalSetter += `${t}}`

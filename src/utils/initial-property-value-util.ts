@@ -1,14 +1,14 @@
 /**
- * Determines the default value to set the builder property to, based on the provided interface datatype.
+ * Determines the default value to set the builder property to, based on the provided interface data type.
  *
- * @param datatype The datatype of the property (e.g. number)
+ * @param dataType The data type of the property (e.g. number)
  */
-export const getInitalPropertyValue = (datatype: string) => {
-  if (datatype.includes('[]')) {
+export const getInitalPropertyValue = (dataType: string) => {
+  if (dataType.includes('[]')) {
     return '[]'
   }
 
-  switch (datatype) {
+  switch (dataType) {
     case 'string':
       return undefined
     case 'number':

@@ -74,7 +74,7 @@ To use the extension:
 - You must have a folder open in Visual Studio Code
 - You must have an interface file open
 - Your interface must include the text `export interface`
-- You need to have at least one property defined with a datatype e.g. `firstName: string`
+- You need to have at least one property defined with a data type e.g. `firstName: string`
 
 ## Known Issues
 
