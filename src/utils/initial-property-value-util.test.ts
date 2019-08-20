@@ -2,22 +2,62 @@ import { getInitalPropertyValue } from './initial-property-value-util'
 
 describe('Initial Property Value Util', () => {
   it('should return the inital property value of `[]` when the data type is an array', () => {
-    expect(getInitalPropertyValue('string[]')).toBe('[]')
+    // Arrange
+    const dataType = 'string[]'
+    const expectedValue = '[]'
+
+    // Act
+    const value = getInitalPropertyValue(dataType)
+
+    // Assert
+    expect(value).toBe(expectedValue)
   })
 
   it('should return the inital property value of `undefined` when the data type is a string', () => {
-    expect(getInitalPropertyValue('string')).toBe(undefined)
+    // Arrange
+    const dataType = 'string'
+    const expectedValue = undefined
+
+    // Act
+    const value = getInitalPropertyValue(dataType)
+
+    // Assert
+    expect(value).toBe(expectedValue)
   })
 
   it('should return the inital property value of `1` when the data type is a number', () => {
-    expect(getInitalPropertyValue('number')).toBe(1)
+    // Arrange
+    const dataType = 'number'
+    const expectedValue = 1
+
+    // Act
+    const value = getInitalPropertyValue(dataType)
+
+    // Assert
+    expect(value).toBe(expectedValue)
   })
 
   it('should return the inital property value of `false` when the data type is a boolean', () => {
-    expect(getInitalPropertyValue('boolean')).toBe(false)
+    // Arrange
+    const dataType = 'boolean'
+    const expectedValue = false
+
+    // Act
+    const value = getInitalPropertyValue(dataType)
+
+    // Assert
+    expect(value).toBe(expectedValue)
   })
 
   it('should return the inital property value of `undefined` when the data type is a unknown', () => {
-    expect(getInitalPropertyValue('foo')).toBe(undefined)
+    // Arrange
+    const dataType = 'foo'
+    const expectedValue = undefined
+
+    // Act
+    const value = getInitalPropertyValue(dataType)
+
+    // Assert
+    expect(value).toBe(expectedValue)
   })
 })
