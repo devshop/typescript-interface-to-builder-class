@@ -51,3 +51,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 - Fixed issue with save path on Windows
+
+## [0.1.9] - 2020-05-25
+
+### Fixed
+- Fixed issue with whitespace in interface properties

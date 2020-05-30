@@ -43,6 +43,7 @@
 ## Packaging
 
 - Update version in package.json
+- Update CHANGELOG.md
 - `npm install -g vsce`
 - `vsce package`
 - Upload generated vsix file to [Visual Studio Marketplace](https://marketplace.visualstudio.com/manage/publishers/frasercrosbie)
